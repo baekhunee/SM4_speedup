@@ -1,8 +1,8 @@
-#include<stdio.h>
-#include<thread>
-#include<iostream>
+#include <stdio.h>
+#include <thread>
+#include <iostream>
 #include <ctime>
-#include<windows.h>
+#include <windows.h>
 #include <cstdlib>
 #define b8 unsigned char
 #define b32 unsigned long
