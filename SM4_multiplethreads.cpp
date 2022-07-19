@@ -43,16 +43,16 @@ b32 CK[32] = {
 	0x10171e25, 0x2c333a41, 0x484f565d, 0x646b7279
 };
 
-b32 S(b32 b); // ²éSºĞ
-b32 Left(b32 a, short length); // Ñ­»·×óÒÆ
-b32 L1(b32 a); // ÏßĞÔ±ä»»L1
-b32 L2(b32 a); // ÏßĞÔ±ä»»L2
-b32 T(b32 a, short mode); // ºÏ³É±ä»»T
-void extendFirst(b32 MK[], b32 K[]); // ÃÜÔ¿À©Õ¹Ëã·¨µÚÒ»²½
-void extendSecond(b32 RK[], b32 K[]); // ÃÜÔ¿À©Õ¹Ëã·¨µÚ¶ş²½
-void getRK(b32 MK[], b32 K[], b32 RK[]); // ÂÖÃÜÔ¿»ñÈ¡
-void iterate32(b32 X[], b32 RK[]); // µü´ú
-void reverse(b32 X[], b32 Y[]); // ·´×ª
+b32 S(b32 b); // æŸ¥Sç›’
+b32 Left(b32 a, short length); // å¾ªç¯å·¦ç§»
+b32 L1(b32 a); // çº¿æ€§å˜æ¢L1
+b32 L2(b32 a); // çº¿æ€§å˜æ¢L2
+b32 T(b32 a, short mode); // åˆæˆå˜æ¢T
+void extendFirst(b32 MK[], b32 K[]); // å¯†é’¥æ‰©å±•ç®—æ³•ç¬¬ä¸€æ­¥
+void extendSecond(b32 RK[], b32 K[]); // å¯†é’¥æ‰©å±•ç®—æ³•ç¬¬äºŒæ­¥
+void getRK(b32 MK[], b32 K[], b32 RK[]); // è½®å¯†é’¥è·å–
+void iterate32(b32 X[], b32 RK[]); // è¿­ä»£
+void reverse(b32 X[], b32 Y[]); // åè½¬
 void encrypt(b32 X[], b32 RK[], b32 Y[]);
 void decrypt(b32 X[], b32 RK[], b32 Y[]);
 
@@ -147,9 +147,9 @@ void decrypt(b32 X[], b32 RK[], b32 Y[]) {
 
 void Thread4(b32** X, b32* Key, int i)
 {
-	b32 K[4]; // ÃÜÔ¿ 
-	b32 RK[32]; // ÂÖÃÜÔ¿
-	b32 Y[4]; // ÃÜÎÄ 
+	b32 K[4]; // å¯†é’¥ 
+	b32 RK[32]; // è½®å¯†é’¥
+	b32 Y[4]; // å¯†æ–‡ 
 	for (int p = 0; p < 10000; p++)
 	{
 		for (int j = 0; j < 2; j++)
@@ -173,9 +173,9 @@ void thread4(b32** X, b32* Key)
 
 void Thread8(b32** X, b32* Key, int i)
 {
-	b32 K[4]; // ÃÜÔ¿ 
-	b32 RK[32]; // ÂÖÃÜÔ¿
-	b32 Y[4]; // ÃÜÎÄ 
+	b32 K[4]; // å¯†é’¥ 
+	b32 RK[32]; // è½®å¯†é’¥
+	b32 Y[4]; // å¯†æ–‡ 
 	for (int p = 0; p < 10000; p++)
 	{
 		getRK(K, Key, RK);
@@ -196,15 +196,15 @@ void thread8(b32** X, b32* Key)
 
 
 int main(void) {
-	b32* X[8]; // Ã÷ÎÄ 
+	b32* X[8]; // æ˜æ–‡ 
 	for (int i = 0; i < 8; i++)
 	{
 		X[i] = new b32[4];
 	}
-	b32 Key[4]; // ÃÜÔ¿ 
-	b32 RK[32]; // ÂÖÃÜÔ¿  
+	b32 Key[4]; // å¯†é’¥ 
+	b32 RK[32]; // è½®å¯†é’¥  
 	b32 K[4];
-	b32 Y[4]; // ÃÜÎÄ 
+	b32 Y[4]; // å¯†æ–‡ 
 	X[0][0] = 0x01234567; X[0][1] = 0x89abcdef; X[0][2] = 0xfedcba98; X[0][3] = 0x76543210;
 	X[1][0] = 0x15ad15ef; X[1][1] = 0xaef4151b; X[1][2] = 0xe15c15da; X[1][3] = 0x384d84ea;
 	X[2][0] = 0x84a1d8e2; X[2][1] = 0x89abcdef; X[2][2] = 0xfedcba98; X[2][3] = 0x76543210;
@@ -215,7 +215,7 @@ int main(void) {
 	X[7][0] = 0xdddddddd; X[7][1] = 0xcaadedab; X[7][2] = 0x88888888; X[7][3] = 0x25181484;
 	
 	Key[0] = 0x27542572; Key[1] = 0xaaaaaaaa; Key[2] = 0xfedcba98; Key[3] = 0x76543210;
-	
+	//æµ‹è¯•åŠ è§£å¯†10000æ¬¡æ‰€éœ€è¦çš„æ—¶é—´
 	auto norm_start = std::chrono::steady_clock::now();
 	for (int j = 0; j < 10000; j++)
 	{
@@ -228,19 +228,19 @@ int main(void) {
 	}
 	auto norm_end = std::chrono::steady_clock::now();
 	std::chrono::duration<double> norm_time1 = norm_end - norm_start;
-	printf("Time_thread£º%.3f¦Ìs\n", (norm_time1.count() / 12000) * 1000000);
+	printf("Time_threadï¼š%.3fÎ¼s\n", (norm_time1.count() / 12000) * 1000000);
 
 	norm_start = std::chrono::steady_clock::now();
 	thread4(X, Key);
 	norm_end = std::chrono::steady_clock::now();
 	norm_time1 = norm_end - norm_start;
-	printf("Time_4threads£º%.3f¦Ìs\n", (norm_time1.count() / 12000) * 1000000);
+	printf("Time_4threadsï¼š%.3fÎ¼s\n", (norm_time1.count() / 12000) * 1000000);
 
 	norm_start = std::chrono::steady_clock::now();
 	thread8(X, Key);
 	norm_end = std::chrono::steady_clock::now();
 	norm_time1 = norm_end - norm_start;
-	printf("Time_8threads£º%.3f¦Ìs\n", (norm_time1.count() / 12000) * 1000000);
+	printf("Time_8threadsï¼š%.3fÎ¼s\n", (norm_time1.count() / 12000) * 1000000);
 
 	return 0;
 }
