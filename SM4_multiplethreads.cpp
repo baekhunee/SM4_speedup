@@ -150,7 +150,7 @@ void Thread4(b32** X, b32* Key, int i)
 	b32 K[4]; // 密钥 
 	b32 RK[32]; // 轮密钥
 	b32 Y[4]; // 密文 
-	for (int p = 0; p < 10000; p++)
+	for (int p = 0; p < 1000; p++)
 	{
 		for (int j = 0; j < 2; j++)
 		{
@@ -176,7 +176,7 @@ void Thread8(b32** X, b32* Key, int i)
 	b32 K[4]; // 密钥 
 	b32 RK[32]; // 轮密钥
 	b32 Y[4]; // 密文 
-	for (int p = 0; p < 10000; p++)
+	for (int p = 0; p < 1000; p++)
 	{
 		getRK(K, Key, RK);
 		encrypt(X[i], RK, Y);
@@ -215,9 +215,9 @@ int main(void) {
 	X[7][0] = 0xdddddddd; X[7][1] = 0xcaadedab; X[7][2] = 0x88888888; X[7][3] = 0x25181484;
 	
 	Key[0] = 0x27542572; Key[1] = 0xaaaaaaaa; Key[2] = 0xfedcba98; Key[3] = 0x76543210;
-	//测试加解密10000次所需要的时间
-	auto norm_start = std::chrono::steady_clock::now();
-	for (int j = 0; j < 10000; j++)
+	//测试加解密1000次需要的时间
+	auto start = std::chrono::steady_clock::now();
+	for (int j = 0; j < 1000; j++)
 	{
 		for (int i = 0; i < 8; i++)
 		{
@@ -226,21 +226,21 @@ int main(void) {
 			decrypt(Y, RK, X[i]);
 		}
 	}
-	auto norm_end = std::chrono::steady_clock::now();
-	std::chrono::duration<double> norm_time1 = norm_end - norm_start;
-	printf("Time_thread：%.3fμs\n", (norm_time1.count() / 12000) * 1000000);
+	auto end = std::chrono::steady_clock::now();
+	double t = std::chrono::duration<double>(end - start).count();
+	printf("Time_thread：%.3f s\n", t);
 
-	norm_start = std::chrono::steady_clock::now();
+	start = std::chrono::steady_clock::now();
 	thread4(X, Key);
-	norm_end = std::chrono::steady_clock::now();
-	norm_time1 = norm_end - norm_start;
-	printf("Time_4threads：%.3fμs\n", (norm_time1.count() / 12000) * 1000000);
+	end = std::chrono::steady_clock::now();
+	t = std::chrono::duration<double>(end - start).count();
+	printf("Time_4threads：%.3f s\n", t);
 
-	norm_start = std::chrono::steady_clock::now();
+	start = std::chrono::steady_clock::now();
 	thread8(X, Key);
-	norm_end = std::chrono::steady_clock::now();
-	norm_time1 = norm_end - norm_start;
-	printf("Time_8threads：%.3fμs\n", (norm_time1.count() / 12000) * 1000000);
+	end = std::chrono::steady_clock::now();
+	t = std::chrono::duration<double>(end - start).count();
+	printf("Time_8threads：%.3f s\n", t);
 
 	return 0;
 }
