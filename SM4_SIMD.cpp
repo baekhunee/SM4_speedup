@@ -1,9 +1,9 @@
-#include<stdio.h>
-#include<iostream>
+#include <stdio.h>
+#include <iostream>
 #include <ctime>
-#include<windows.h>
+#include <windows.h>
 #include <cstdlib>
-#include<immintrin.h>
+#include <immintrin.h>
 #include <chrono>
 
 #define b8 uint8_t
@@ -264,7 +264,7 @@ void SM4_KeyDelete(SM4_Key sm4_key)
 	free(sm4_key);
 }
 
-//´ò°ü(loµÍÎ»£¬hi¸ßÎ»)
+//æ‰“åŒ…(loä½ä½ï¼Œhié«˜ä½)
 #define PACK0_EPI32(a, b, c, d)                  \
     _mm256_unpacklo_epi64(_mm256_unpacklo_epi32(a, b), \
                           _mm256_unpacklo_epi32(c, d))
@@ -282,35 +282,35 @@ void SM4_KeyDelete(SM4_Key sm4_key)
 void SM4_simd(b8* m, b8* p, SM4_Key sm4_key, int enc)
 {
     __m256i X[4], tmp[4];
-    __m256i mask = _mm256_set1_epi32(0xFF);//32bit·Ö×éÊı¾İ×°ÔØ£¨È«²¿Éè³É0xFF£©
-    //¼ÓÔØÊı¾İ
+    __m256i mask = _mm256_set1_epi32(0xFF);//32bitåˆ†ç»„æ•°æ®è£…è½½ï¼ˆå…¨éƒ¨è®¾æˆ0xFFï¼‰
+    //åŠ è½½æ•°æ®
     tmp[0] = _mm256_loadu_si256((const __m256i*)m + 0);
     tmp[1] = _mm256_loadu_si256((const __m256i*)m + 1);
     tmp[2] = _mm256_loadu_si256((const __m256i*)m + 2);
     tmp[3] = _mm256_loadu_si256((const __m256i*)m + 3);
-    //´ò°üÊı¾İ
+    //æ‰“åŒ…æ•°æ®
     X[0] = PACK0_EPI32(tmp[0], tmp[1], tmp[2], tmp[3]);
     X[1] = PACK1_EPI32(tmp[0], tmp[1], tmp[2], tmp[3]);
     X[2] = PACK2_EPI32(tmp[0], tmp[1], tmp[2], tmp[3]);
     X[3] = PACK3_EPI32(tmp[0], tmp[1], tmp[2], tmp[3]);
-    //×ªĞò²¢ÒÔ×Ö½ÚÎªµ¥Î»ÖØÅÅ
+    //è½¬åºå¹¶ä»¥å­—èŠ‚ä¸ºå•ä½é‡æ’
     __m256i rindex =_mm256_setr_epi8(3, 2, 1, 0, 7, 6, 5, 4, 11, 10, 9, 8, 15, 14, 13, 12,
             3, 2, 1, 0, 7, 6, 5, 4, 11, 10, 9, 8, 15, 14, 13, 12);
     X[0] = _mm256_shuffle_epi8(X[0], rindex);
     X[1] = _mm256_shuffle_epi8(X[1], rindex);
     X[2] = _mm256_shuffle_epi8(X[2], rindex);
     X[3] = _mm256_shuffle_epi8(X[3], rindex);
-    //µü´ú
+    //è¿­ä»£
     for (int i = 0; i < 32; i++) 
     {
-        //32bit·Ö×éÊı¾İ×°ÔØ
+        //32bitåˆ†ç»„æ•°æ®è£…è½½
         __m256i k =_mm256_set1_epi32((enc == 0) ? sm4_key[i] : sm4_key[31 - i]);
-        //256bitÒì»ò
+        //256bitå¼‚æˆ–
         tmp[0] = _mm256_xor_si256(_mm256_xor_si256(X[1], X[2]),_mm256_xor_si256(X[3], k));
-        //32bit²¢ĞĞ²é±í
+        //32bitå¹¶è¡ŒæŸ¥è¡¨
         tmp[1] = _mm256_xor_si256(X[0], _mm256_i32gather_epi32((const int*)Sbox0,
             _mm256_and_si256(tmp[0], mask), 4));
-        //32bitÄÚÓÒÒÆ
+        //32bitå†…å³ç§»
         tmp[0] = _mm256_srli_epi32(tmp[0], 8);
 
         tmp[1] = _mm256_xor_si256(tmp[1], _mm256_i32gather_epi32((const int*)Sbox1,
@@ -328,12 +328,12 @@ void SM4_simd(b8* m, b8* p, SM4_Key sm4_key, int enc)
         X[2] = X[3];
         X[3] = tmp[1];
     }
-    //×ª»¯¶ËĞò
+    //è½¬åŒ–ç«¯åº
     X[0] = _mm256_shuffle_epi8(X[0], rindex);
     X[1] = _mm256_shuffle_epi8(X[1], rindex);
     X[2] = _mm256_shuffle_epi8(X[2], rindex);
     X[3] = _mm256_shuffle_epi8(X[3], rindex);
-    //×°ÌîÊı¾İ
+    //è£…å¡«æ•°æ®
     _mm256_storeu_si256((__m256i*)p + 0, PACK0_EPI32(X[3], X[2], X[1], X[0]));
     _mm256_storeu_si256((__m256i*)p + 1, PACK1_EPI32(X[3], X[2], X[1], X[0]));
     _mm256_storeu_si256((__m256i*)p + 2, PACK2_EPI32(X[3], X[2], X[1], X[0]));
@@ -366,7 +366,7 @@ int main()
         }
         auto end = std::chrono::steady_clock::now();
         double t= std::chrono::duration<double, std::milli>(end - start).count();
-        printf("¼Ó½âÃÜ1000´ÎËùĞèÒªµÄÊ±¼ä£º%.3fms\n", t);
+        printf("åŠ è§£å¯†1000æ¬¡æ‰€éœ€è¦çš„æ—¶é—´ï¼š%.3fms\n", t);
 
         SM4_KeyDelete(Key);
     }
