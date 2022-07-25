@@ -15,4 +15,8 @@ SM4 speedup
 
 git账户名称：baekhunee
 
-# 
+# T-table
+本次实验中SM4根据算法流程一步步实现即可。SM4的密钥扩展方案与加密过程中均涉及查S盒与线性变换L，使用T表优化即将二者合并，将原来4个8进8出的S盒替换为一个32进32出的新表。
+
+## 运行截图
+![image](https://user-images.githubusercontent.com/105578152/180714289-082d841a-fc1a-41b8-8cd4-56492c8932a8.png)
