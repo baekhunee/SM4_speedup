@@ -25,6 +25,11 @@ git账户名称：baekhunee
 
 进一步地，可以使用多线程对SM4进行优化，SM4_multithreads.cpp中对比了单线程、四线程与八线程的运行时间。
 
-## 运行截图
+## 运行截图（运行1000次）
 ![image](https://user-images.githubusercontent.com/105578152/180715365-e82b2217-5140-47d3-b212-b5843d2a0b90.png)
 
+# 使用SIMD指令集进行优化
+在T表的基础上，使用SIMD指令集提高指令的并行性，从而进一步提升SM4的加解密速度。
+
+## 运行截图（运行1000次）
+![image](https://user-images.githubusercontent.com/105578152/180715821-5e1c9e06-6be9-4090-8895-d930f5e7e6fe.png)
