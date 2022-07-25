@@ -20,3 +20,11 @@ git账户名称：baekhunee
 
 ## 运行截图
 ![image](https://user-images.githubusercontent.com/105578152/180714289-082d841a-fc1a-41b8-8cd4-56492c8932a8.png)
+
+# 多线程优化
+
+进一步地，可以使用多线程对SM4进行优化，SM4_multithreads.cpp中对比了单线程、四线程与八线程的运行时间。
+
+## 运行截图
+![image](https://user-images.githubusercontent.com/105578152/180715365-e82b2217-5140-47d3-b212-b5843d2a0b90.png)
+
